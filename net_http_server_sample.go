@@ -28,5 +28,4 @@ func main() {
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/greeting", customGreeting)
 	http.ListenAndServe(":8181", nil)
-
 }

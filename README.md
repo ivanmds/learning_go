@@ -1,0 +1,2 @@
+to install external package exec "go get -u url_package" ex: go get -u github.com/gorilla/mux
+The command above is depreciated. To install a package use the command  "go install -v github.com/gorilla/mux@latest"
