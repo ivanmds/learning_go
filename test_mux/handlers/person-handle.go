@@ -12,7 +12,7 @@ var persons = make([]Person, 0)
 type Person struct {
 	Name       string `json:"name"`
 	MotherName string `json:"motherName"`
-	Document   string `document`
+	Document   string `json:"document"`
 }
 
 func SavePerson(w http.ResponseWriter, r *http.Request) {
