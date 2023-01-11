@@ -19,7 +19,6 @@ func greetingHandler(w http.ResponseWriter, r *http.Request) {
 
 	person := Person{Name: name}
 	renderTemplate(w, "./pages/greeting.html", person)
-
 }
 
 func renderTemplate(w http.ResponseWriter, templateFile string, person Person) {
