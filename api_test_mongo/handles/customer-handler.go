@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"strconv"
+
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -30,6 +32,51 @@ func GetCustomer(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(customer)
+}
+
+func FindCustomerPagination(w http.ResponseWriter, r *http.Request) {
+
+	pageString := r.URL.Query().Get("page")
+	limitString := r.URL.Query().Get("limit")
+
+	if pageString == "" {
+		pageString = "0"
+	}
+
+	if limitString == "" {
+		limitString = "0"
+	}
+
+	page, err := strconv.Atoi(pageString)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	limit, err := strconv.Atoi(limitString)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	customers, err := repositories.FindCustomerPagination(page, limit)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	if customers == nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(customers)
 }
 
 func InsertCustomer(w http.ResponseWriter, r *http.Request) {

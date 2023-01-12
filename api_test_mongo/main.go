@@ -9,6 +9,7 @@ import (
 
 func main() {
 	router := mux.NewRouter()
+	router.HandleFunc("/customers", handles.FindCustomerPagination).Methods("GET")
 	router.HandleFunc("/customers/{id}", handles.GetCustomer).Methods("GET")
 	router.HandleFunc("/customers", handles.InsertCustomer).Methods("POST")
 	router.HandleFunc("/customers/{id}", handles.ReplaceCustomer).Methods("PUT")

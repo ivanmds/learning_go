@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var collection *mongo.Collection
@@ -33,6 +34,36 @@ func GetCustomer(id string) (entities.Customer, error) {
 	var customer entities.Customer
 	result.Decode(&customer)
 	return customer, nil
+}
+
+func FindCustomerPagination(page int, limit int) ([]entities.Customer, error) {
+
+	if page == 0 {
+		page = 1
+	}
+
+	if limit == 0 {
+		limit = 5
+	}
+
+	filter := bson.M{"active": true}
+	options := new(options.FindOptions)
+
+	options.SetSkip(int64((page - 1) * limit))
+	options.SetLimit(int64(limit))
+
+	cursor, err := collection.Find(context.TODO(), filter, options)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var customers []entities.Customer
+	if err = cursor.All(context.TODO(), &customers); err != nil {
+		return nil, err
+	}
+
+	return customers, nil
 }
 
 func InsertCustomer(customer entities.Customer) (entities.Customer, error) {
