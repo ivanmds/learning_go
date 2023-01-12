@@ -2,7 +2,7 @@ package entities
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-type BirthDate string
+type Birthdate string
 type AddressType int
 type ContactType int
 
@@ -35,8 +35,9 @@ type Contact struct {
 type Customer struct {
 	ID         primitive.ObjectID `bson:"_id" json:"id",omitempty`
 	Name       string             `json:"name"`
-	BirthDate  BirthDate          `json:"birthDate"`
+	Birthdate  Birthdate          `json:"birthdate"`
 	MotherName string             `json:"motherName"`
 	Contacts   []Contact          `json:"contacts"`
 	Addresses  []Address          `json:"addresses"`
+	Active     bool               `bson:"active" json:"-"`
 }
