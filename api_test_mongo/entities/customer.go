@@ -23,7 +23,7 @@ type Address struct {
 	City         string      `json:"city"`
 	State        string      `json:"state"`
 	Country      string      `json:"country"`
-	Complement   string      `json:"Complement"`
+	Complement   string      `json:"complement"`
 	Type         AddressType `json:"type"`
 }
 

@@ -4,8 +4,8 @@ import (
 	"api_test_crud_mongo/entities"
 	"api_test_crud_mongo/repositories"
 	"encoding/json"
+	"fmt"
 	"net/http"
-
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -23,6 +23,9 @@ func GetCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	headerValue := r.Header.Values("x-test-header-propagated")
+	fmt.Println(headerValue)
+
 	if customer.ID == primitive.NilObjectID {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusNotFound)
@@ -30,7 +33,8 @@ func GetCustomer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("x-test-header-propagated", "test_propagated")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(customer)
 }
 
